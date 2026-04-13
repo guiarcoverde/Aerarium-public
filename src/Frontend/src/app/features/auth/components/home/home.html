@@ -1,0 +1,8 @@
+<div class="home-container">
+  <div class="home-card">
+    <h1>Aerarium</h1>
+    <p class="welcome">Welcome, <strong>{{ authService.email() }}</strong></p>
+    <p class="status">You are authenticated.</p>
+    <button (click)="logout()">Sign Out</button>
+  </div>
+</div>

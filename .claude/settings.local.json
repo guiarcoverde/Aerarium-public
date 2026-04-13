@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet:*)",
+      "Bash(ls:*)",
+      "Bash(grep -E \"\\\\.json$|\\\\.ts$|tsconfig|proxy\")",
+      "Bash(make run:*)",
+      "Bash(xargs grep:*)",
+      "Bash(find:*)",
+      "Bash(xargs -I {} basename {})"
+    ]
+  }
+}

@@ -1,0 +1,153 @@
+<div class="transactions-page">
+  <div class="toolbar">
+    <div class="search">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" [placeholder]="'transactions.searchPlaceholder' | translate"
+        [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" />
+    </div>
+    <button type="button" class="btn-new" (click)="openCreate()">{{ 'transactions.newTransaction' | translate }}</button>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="filterMonth">{{ 'transactions.filters.month' | translate }}</label>
+      <select id="filterMonth" [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onFilterChange()">
+        <option [ngValue]="null">{{ 'common.all' | translate }}</option>
+        <option [ngValue]="1">January</option>
+        <option [ngValue]="2">February</option>
+        <option [ngValue]="3">March</option>
+        <option [ngValue]="4">April</option>
+        <option [ngValue]="5">May</option>
+        <option [ngValue]="6">June</option>
+        <option [ngValue]="7">July</option>
+        <option [ngValue]="8">August</option>
+        <option [ngValue]="9">September</option>
+        <option [ngValue]="10">October</option>
+        <option [ngValue]="11">November</option>
+        <option [ngValue]="12">December</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="filterYear">{{ 'transactions.filters.year' | translate }}</label>
+      <input id="filterYear" type="number" [ngModel]="filterYear()"
+        (ngModelChange)="filterYear.set($event); onFilterChange()" [placeholder]="'transactions.filters.year' | translate" min="2000" max="2100">
+    </div>
+
+    <div class="filter-group">
+      <label for="filterCategory">{{ 'transactions.filters.category' | translate }}</label>
+      <select id="filterCategory" [ngModel]="filterCategory()" (ngModelChange)="filterCategory.set($event); onFilterChange()">
+        <option [ngValue]="null">{{ 'common.all' | translate }}</option>
+        @for (c of categoryOptions; track c.value) {
+          <option [ngValue]="c.value">{{ c.label | translate }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="filterType">{{ 'transactions.filters.type' | translate }}</label>
+      <select id="filterType" [ngModel]="filterType()" (ngModelChange)="filterType.set($event); onFilterChange()">
+        <option [ngValue]="null">{{ 'common.all' | translate }}</option>
+        <option [ngValue]="TransactionType.Income">{{ 'transactions.type.income' | translate }}</option>
+        <option [ngValue]="TransactionType.Expense">{{ 'transactions.type.expense' | translate }}</option>
+      </select>
+    </div>
+
+    <button class="btn-clear" (click)="clearFilters()">{{ 'transactions.filters.clear' | translate }}</button>
+  </div>
+
+  @if (error()) {
+    <div class="error-banner">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <div class="loading">{{ 'common.loading' | translate }}</div>
+  } @else if (filteredTransactions().length === 0) {
+    <div class="empty-state">
+      <p>{{ 'transactions.empty' | translate }}</p>
+    </div>
+  } @else {
+    <div class="tx-table">
+      <div class="tx-row tx-row--head">
+        <span>{{ 'transactions.columns.nameBusiness' | translate }}</span>
+        <span>{{ 'transactions.columns.type' | translate }}</span>
+        <span>{{ 'transactions.columns.amount' | translate }}</span>
+        <span>{{ 'transactions.columns.date' | translate }}</span>
+        <span class="col-actions"></span>
+      </div>
+
+      @for (tx of filteredTransactions(); track tx.id) {
+        @let icon = iconFor(tx.category);
+        <div class="tx-row">
+          <div class="tx-name">
+            <div class="tx-icon" [style.background]="icon.tint + '1f'" [style.color]="icon.tint">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="icon.pathD" />
+              </svg>
+            </div>
+            <div class="tx-name-text">
+              <strong>{{ tx.description }}</strong>
+              <span>{{ tx.categoryDisplayName }}</span>
+            </div>
+          </div>
+
+          <span class="tx-type">{{ tx.categoryDisplayName }}</span>
+
+          <span class="tx-amount"
+            [class.text-income]="tx.type === TransactionType.Income"
+            [class.text-expense]="tx.type === TransactionType.Expense">
+            {{ tx.type === TransactionType.Expense ? '- ' : '' }}{{ tx.amount | currency: 'BRL' : 'symbol' : '1.2-2' }}
+          </span>
+
+          <span class="tx-date">{{ tx.date | date: 'dd MMM yyyy' }}</span>
+
+          <div class="col-actions">
+            <button type="button" class="action-btn" (click)="openEdit(tx)" title="Edit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
+            <button class="action-btn action-btn--danger" (click)="deleteTransaction(tx)" title="Delete">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+            </button>
+            @if (tx.recurrenceGroupId) {
+              <button class="action-btn action-btn--danger" (click)="deleteSeries(tx)" title="Delete Series">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  <line x1="10" y1="11" x2="10" y2="17" />
+                  <line x1="14" y1="11" x2="14" y2="17" />
+                </svg>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="pagination">
+      <button class="page-btn" [disabled]="page() <= 1" (click)="goToPage(page() - 1)">&lt;</button>
+      <span class="page-info">{{ 'common.page' | translate }} {{ page() }} {{ 'common.of' | translate }} {{ totalPages }}</span>
+      <button class="page-btn" [disabled]="page() >= totalPages" (click)="goToPage(page() + 1)">&gt;</button>
+    </div>
+  }
+
+  <app-transaction-form-drawer
+    [open]="drawerOpen()"
+    [mode]="drawerMode()"
+    [transaction]="editingTx()"
+    (closed)="onDrawerClosed()"
+    (saved)="onDrawerSaved()" />
+</div>

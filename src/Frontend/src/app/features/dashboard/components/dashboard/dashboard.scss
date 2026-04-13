@@ -1,0 +1,337 @@
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: var(--space-7);
+  align-items: flex-start;
+}
+
+.dashboard-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.error-banner {
+  padding: var(--space-3) var(--space-4);
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--danger);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+// --- Stat cards -----------------------------------------------------------
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent-secondary);
+  flex-shrink: 0;
+
+  &--muted {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+  }
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+// --- Chart card -----------------------------------------------------------
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-bottom: var(--space-5);
+
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    flex: 1;
+  }
+}
+
+.chart-canvas {
+  position: relative;
+  height: 280px;
+}
+
+.chart-empty {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+// --- Recent transactions --------------------------------------------------
+
+.recent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.view-all {
+  color: var(--accent-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+
+  &:hover { color: var(--accent-primary); }
+}
+
+.recent-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--border);
+
+  &:last-child { border-bottom: none; }
+
+  &--head {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    padding: var(--space-2) 0;
+  }
+}
+
+.recent-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.recent-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent-secondary);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.recent-name-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+  }
+}
+
+.recent-type,
+.recent-date {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.recent-amount {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.recent-empty {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+// --- Right rail -----------------------------------------------------------
+
+.dashboard-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  position: sticky;
+  top: calc(var(--topbar-height) + var(--space-6));
+}
+
+.rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.rail-more {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  letter-spacing: 2px;
+}
+
+// Wallet
+.wallet-stack {
+  position: relative;
+  height: 250px;
+}
+
+.wallet-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #2a2445 0%, #1d1a33 100%);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-elevated);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 180px;
+
+  &:first-child {
+    top: 0;
+    z-index: 2;
+  }
+
+  &--second {
+    top: 70px;
+    z-index: 1;
+    background: linear-gradient(135deg, #3d2a5f 0%, #261a3d 100%);
+  }
+}
+
+.wallet-card-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.wallet-brand {
+  font-weight: 700;
+}
+
+.wallet-bank {
+  color: var(--text-secondary);
+}
+
+.wallet-chip {
+  color: var(--text-muted);
+}
+
+.wallet-number {
+  font-size: var(--font-size-md);
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  margin-top: auto;
+}
+
+.wallet-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.wallet-brand-mark {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-rail {
+    position: static;
+  }
+}

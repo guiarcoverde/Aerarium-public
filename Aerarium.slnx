@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Api/">
+    <Project Path="src/Api/Aerarium.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Application/">
+    <Project Path="src/Application/Aerarium.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Domain/">
+    <Project Path="src/Domain/Aerarium.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/Aerarium.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/IntegrationTests/">
+    <Project Path="tests/IntegrationTests/Aerarium.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UnitTests/">
+    <Project Path="tests/UnitTests/Aerarium.UnitTests.csproj" />
+  </Folder>
+</Solution>

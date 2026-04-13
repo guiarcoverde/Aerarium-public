@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <!-- Income -->
+  <data name="Salary"><value>Salary</value></data>
+  <data name="Bonus"><value>Bonus</value></data>
+  <data name="Loan"><value>Loan</value></data>
+  <data name="Investment"><value>Investment</value></data>
+  <data name="ExtraIncome"><value>Extra Income</value></data>
+  <data name="Gift"><value>Gift</value></data>
+  <data name="BankTransfer"><value>Bank Transfer</value></data>
+  <data name="OtherIncome"><value>Other</value></data>
+
+  <!-- Expense -->
+  <data name="Housing"><value>Housing</value></data>
+  <data name="Education"><value>Education</value></data>
+  <data name="Electronics"><value>Electronics</value></data>
+  <data name="Leisure"><value>Leisure</value></data>
+  <data name="OtherExpense"><value>Other</value></data>
+  <data name="Restaurant"><value>Restaurant</value></data>
+  <data name="Health"><value>Health</value></data>
+  <data name="Services"><value>Services</value></data>
+  <data name="Grocery"><value>Grocery</value></data>
+  <data name="Transportation"><value>Transportation</value></data>
+  <data name="Clothing"><value>Clothing</value></data>
+  <data name="Travel"><value>Travel</value></data>
+</root>

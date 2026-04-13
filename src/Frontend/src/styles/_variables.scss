@@ -1,0 +1,70 @@
+:root {
+  // Surfaces — dark purple-navy gradient from page → card
+  --bg-primary: #0f0d1a;
+  --bg-secondary: #17142a;
+  --bg-card: #1d1a33;
+  --bg-card-hover: #252040;
+  --bg-elevated: #2a2445;
+
+  // Brand accent — purple
+  --accent-primary: #8b5cf6;
+  --accent-primary-hover: #7c3aed;
+  --accent-secondary: #a78bfa;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(139, 92, 246, 0.12);
+  --accent-soft-strong: rgba(139, 92, 246, 0.22);
+
+  // Text
+  --text-primary: #f1f0f5;
+  --text-secondary: #9b95a8;
+  --text-muted: #6b6478;
+
+  // Structure
+  --border: #2a2538;
+  --border-strong: #352e4a;
+
+  // Semantic
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --income-color: #22c55e;
+  --expense-color: #ef4444;
+
+  // Typography
+  --font-sans: 'Kumbh Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs: 0.75rem;    // 12
+  --font-size-sm: 0.8125rem;  // 13
+  --font-size-base: 0.875rem; // 14
+  --font-size-md: 1rem;       // 16
+  --font-size-lg: 1.125rem;   // 18
+  --font-size-xl: 1.25rem;    // 20
+  --font-size-2xl: 1.5rem;    // 24
+  --font-size-3xl: 1.75rem;   // 28
+  --font-size-4xl: 2rem;      // 32
+
+  // Spacing scale (4px base)
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-9: 3rem;
+
+  // Radii
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  // Shadows
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  // Layout
+  --sidebar-width: 260px;
+  --topbar-height: 72px;
+}

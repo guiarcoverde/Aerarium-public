@@ -1,0 +1,19 @@
+<section class="investments-page">
+  <header class="investments-header">
+    <div>
+      <h2>{{ 'investments.title' | translate }}</h2>
+      <p>{{ 'investments.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  @if (error()) {
+    <div class="error-banner">{{ error() }}</div>
+  }
+
+  @if (investments().length === 0) {
+    <div class="empty-state">
+      <p class="empty-title">{{ 'investments.empty' | translate }}</p>
+      <p class="empty-hint">{{ 'investments.comingSoon' | translate }}</p>
+    </div>
+  }
+</section>

@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: aerarium-postgres
+    environment:
+      POSTGRES_USER: aerarium
+      POSTGRES_PASSWORD: aerarium_dev
+      POSTGRES_DB: aerarium
+    ports:
+      - "5432:5432"
+    volumes:
+      - aerarium-pgdata:/var/lib/postgresql/data
+
+volumes:
+  aerarium-pgdata:

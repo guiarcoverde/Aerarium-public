@@ -1,0 +1,129 @@
+.settings-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  max-width: 1000px;
+}
+
+.settings-header {
+  margin-bottom: var(--space-8);
+
+  h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+  }
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  border: none;
+  color: var(--accent-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { color: var(--accent-primary); }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5) var(--space-6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  input {
+    width: 100%;
+    padding: var(--space-4);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    outline: none;
+
+    &::placeholder { color: var(--text-muted); }
+
+    &:focus { border-color: var(--accent-primary); }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    &.has-prefix { padding-left: 42px; }
+    &.has-suffix { padding-right: 42px; }
+  }
+}
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix,
+.input-suffix {
+  position: absolute;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.input-prefix { left: var(--space-4); }
+.input-suffix { right: var(--space-4); }
+
+.input-suffix-btn {
+  position: absolute;
+  right: var(--space-3);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--space-2);
+  display: grid;
+  place-items: center;
+
+  &:hover:not(:disabled) { color: var(--text-primary); }
+  &:disabled { cursor: not-allowed; }
+}

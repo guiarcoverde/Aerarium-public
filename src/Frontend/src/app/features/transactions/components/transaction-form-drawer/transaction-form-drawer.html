@@ -1,0 +1,272 @@
+@if (open()) {
+  <div class="drawer-backdrop" (click)="requestClose()"></div>
+  <aside class="drawer" role="dialog" aria-modal="true">
+    <header class="drawer__header">
+      <h2>
+        {{ (mode() === 'edit' ? 'transactions.form.editHeading' : 'transactions.form.newHeading') | translate }}
+      </h2>
+      <button type="button" class="drawer__close" (click)="requestClose()"
+        [attr.aria-label]="'common.cancel' | translate" [disabled]="submitting()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="drawer__body">
+      @if (error()) {
+        <div class="banner banner--error">{{ error() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="tx-form-card" id="tx-drawer-form">
+        <div class="field">
+          <label class="field-label">{{ 'transactions.form.type' | translate }}</label>
+          <div class="type-toggle" role="radiogroup">
+            <button type="button" class="type-toggle__btn"
+              [class.is-active]="currentType() === TransactionType.Income"
+              [class.type-toggle__btn--income]="currentType() === TransactionType.Income"
+              (click)="setType(TransactionType.Income)" role="radio"
+              [attr.aria-checked]="currentType() === TransactionType.Income">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19 12 12 19 5 12" />
+              </svg>
+              {{ 'transactions.type.income' | translate }}
+            </button>
+            <button type="button" class="type-toggle__btn"
+              [class.is-active]="currentType() === TransactionType.Expense"
+              [class.type-toggle__btn--expense]="currentType() === TransactionType.Expense"
+              (click)="setType(TransactionType.Expense)" role="radio"
+              [attr.aria-checked]="currentType() === TransactionType.Expense">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5" />
+                <polyline points="5 12 12 5 19 12" />
+              </svg>
+              {{ 'transactions.type.expense' | translate }}
+            </button>
+          </div>
+          @if (form.controls.type.touched && form.controls.type.hasError('required')) {
+            <span class="field-error">{{ 'transactions.form.errors.typeRequired' | translate }}</span>
+          }
+        </div>
+
+        <div class="field field--hero">
+          <label for="amount" class="field-label">{{ 'transactions.form.amount' | translate }}</label>
+          <div class="hero-amount">
+            <span class="hero-amount__prefix">R$</span>
+            <input id="amount" type="number" formControlName="amount" placeholder="0,00" step="0.01" min="0.01"
+              class="hero-amount__input" inputmode="decimal" />
+          </div>
+          @if (form.controls.amount.touched && form.controls.amount.hasError('required')) {
+            <span class="field-error">{{ 'transactions.form.errors.amountRequired' | translate }}</span>
+          } @else if (form.controls.amount.touched && form.controls.amount.hasError('min')) {
+            <span class="field-error">{{ 'transactions.form.errors.amountMin' | translate }}</span>
+          }
+        </div>
+
+        <div class="field">
+          <label for="description" class="field-label">{{ 'transactions.form.description' | translate }}</label>
+          <input id="description" type="text" formControlName="description"
+            [placeholder]="'transactions.form.descriptionPlaceholder' | translate" />
+          @if (form.controls.description.touched && form.controls.description.hasError('required')) {
+            <span class="field-error">{{ 'transactions.form.errors.descriptionRequired' | translate }}</span>
+          }
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="category" class="field-label">{{ 'transactions.form.category' | translate }}</label>
+            <select id="category" formControlName="category" [disabled]="!currentType()">
+              <option [ngValue]="null" disabled>{{ 'transactions.form.selectCategory' | translate }}</option>
+              @for (cat of filteredCategories(); track cat.value) {
+                <option [ngValue]="cat.value">{{ cat.label | translate }}</option>
+              }
+            </select>
+            @if (form.controls.category.touched && form.controls.category.hasError('required')) {
+              <span class="field-error">{{ 'transactions.form.errors.categoryRequired' | translate }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label for="date" class="field-label">{{ 'transactions.form.date' | translate }}</label>
+            <input id="date" type="date" formControlName="date" />
+            @if (form.controls.date.touched && form.controls.date.hasError('required')) {
+              <span class="field-error">{{ 'transactions.form.errors.dateRequired' | translate }}</span>
+            }
+          </div>
+        </div>
+
+        @if (showPaymentMethod()) {
+          <div class="field">
+            <label class="field-label">{{ 'transactions.form.paymentMethod' | translate }}</label>
+            <div class="chip-group" role="radiogroup">
+              @for (pm of paymentMethods; track pm.value) {
+                <button type="button" class="chip"
+                  [class.is-active]="currentPaymentMethod() === pm.value"
+                  (click)="setPaymentMethod(pm.value)" role="radio"
+                  [attr.aria-checked]="currentPaymentMethod() === pm.value">
+                  {{ 'transactions.paymentMethod.' + pm.label.toLowerCase() | translate }}
+                </button>
+              }
+            </div>
+            @if (form.controls.paymentMethod.touched && form.controls.paymentMethod.hasError('required')) {
+              <span class="field-error">{{ 'transactions.form.errors.paymentMethodRequired' | translate }}</span>
+            }
+          </div>
+        }
+
+        @if (showBankSelect()) {
+          <div class="field">
+            <label for="bankAccountId" class="field-label">{{ 'transactions.form.bankAccount' | translate }}</label>
+            @if (bankAccounts().length === 0) {
+              <p class="hint">{{ 'transactions.form.noBanksHint' | translate }}</p>
+            } @else {
+              <select id="bankAccountId" formControlName="bankAccountId">
+                <option [ngValue]="null" disabled>{{ 'transactions.form.selectBank' | translate }}</option>
+                @for (bank of bankAccounts(); track bank.id) {
+                  <option [ngValue]="bank.id">{{ bank.name }} ({{ bank.balance | currency: 'BRL' : 'symbol' : '1.2-2' }})</option>
+                }
+              </select>
+            }
+          </div>
+        }
+
+        @if (showCardSelect()) {
+          <div class="field">
+            <label for="cardId" class="field-label">{{ 'transactions.form.card' | translate }}</label>
+            @if (filteredCards().length === 0) {
+              <p class="hint">{{ 'transactions.form.noCardsHint' | translate }}</p>
+            } @else {
+              <select id="cardId" formControlName="cardId">
+                <option [ngValue]="null" disabled>{{ 'transactions.form.selectCard' | translate }}</option>
+                @for (card of filteredCards(); track card.id) {
+                  <option [ngValue]="card.id">{{ card.name }} ({{ card.availableLimit | currency: 'BRL' : 'symbol' : '1.2-2' }})</option>
+                }
+              </select>
+            }
+          </div>
+        }
+
+        <div class="recurring-toggle">
+          <div class="recurring-toggle__text">
+            <span class="recurring-toggle__title">{{ 'transactions.form.makeRecurring' | translate }}</span>
+            <span class="recurring-toggle__hint">{{ 'transactions.form.recurrenceHint' | translate }}</span>
+          </div>
+          <button type="button" class="switch" [class.is-on]="recurringEnabled()" (click)="toggleRecurring()"
+            role="switch" [attr.aria-checked]="recurringEnabled()">
+            <span class="switch__thumb"></span>
+          </button>
+        </div>
+
+        @if (recurringEnabled()) {
+          <div class="form-section">
+            <div class="grid-2">
+              <div class="field">
+                <label for="recurrence" class="field-label">{{ 'transactions.form.recurrence' | translate }}</label>
+                <select id="recurrence" formControlName="recurrence">
+                  <option [ngValue]="Recurrence.Daily">{{ 'transactions.recurrence.daily' | translate }}</option>
+                  <option [ngValue]="Recurrence.Weekly">{{ 'transactions.recurrence.weekly' | translate }}</option>
+                  <option [ngValue]="Recurrence.Monthly">{{ 'transactions.recurrence.monthly' | translate }}</option>
+                  <option [ngValue]="Recurrence.Yearly">{{ 'transactions.recurrence.yearly' | translate }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label for="recurrenceEndDate" class="field-label">{{ 'transactions.form.endDate' | translate }}</label>
+                <input id="recurrenceEndDate" type="date" formControlName="recurrenceEndDate" />
+              </div>
+              <div class="field">
+                <label for="recurrenceCount" class="field-label">{{ 'transactions.form.occurrences' | translate }}</label>
+                <input id="recurrenceCount" type="number" formControlName="recurrenceCount"
+                  placeholder="e.g. 12" min="1" step="1" />
+                @if (form.controls.recurrenceCount.touched && form.controls.recurrenceCount.hasError('min')) {
+                  <span class="field-error">{{ 'transactions.form.errors.occurrencesMin' | translate }}</span>
+                }
+              </div>
+            </div>
+
+            @if (showSalarySchedule()) {
+              <div class="salary-block">
+                <h3>{{ 'transactions.form.salarySchedule' | translate }}</h3>
+                <div class="field">
+                  <label for="salaryScheduleMode" class="field-label">{{ 'transactions.form.mode' | translate }}</label>
+                  <select id="salaryScheduleMode" formControlName="salaryScheduleMode">
+                    <option [ngValue]="null" disabled>{{ 'transactions.form.selectMode' | translate }}</option>
+                    <option [ngValue]="SalaryScheduleMode.BusinessDay">{{ 'transactions.form.businessDay' | translate }}</option>
+                    <option [ngValue]="SalaryScheduleMode.FixedDate">{{ 'transactions.form.fixedDate' | translate }}</option>
+                    <option [ngValue]="SalaryScheduleMode.FixedDateSplit">{{ 'transactions.form.fixedDateSplit' | translate }}</option>
+                  </select>
+                </div>
+
+                @switch (salaryMode()) {
+                  @case (SalaryScheduleMode.BusinessDay) {
+                    <div class="field">
+                      <label for="businessDayNumber" class="field-label">{{ 'transactions.form.businessDayNumber' | translate }}</label>
+                      <input id="businessDayNumber" type="number" formControlName="businessDayNumber"
+                        placeholder="e.g. 5" min="1" max="23" step="1" />
+                      @if (form.controls.businessDayNumber.touched && form.controls.businessDayNumber.invalid) {
+                        <span class="field-error">{{ 'transactions.form.errors.businessDayRange' | translate }}</span>
+                      }
+                    </div>
+                  }
+                  @case (SalaryScheduleMode.FixedDate) {
+                    <div class="field">
+                      <label for="fixedDay" class="field-label">{{ 'transactions.form.dayOfMonth' | translate }}</label>
+                      <input id="fixedDay" type="number" formControlName="fixedDay"
+                        placeholder="e.g. 25" min="1" max="31" step="1" />
+                      @if (form.controls.fixedDay.touched && form.controls.fixedDay.invalid) {
+                        <span class="field-error">{{ 'transactions.form.errors.fixedDayRange' | translate }}</span>
+                      }
+                    </div>
+                  }
+                  @case (SalaryScheduleMode.FixedDateSplit) {
+                    <div class="field">
+                      <label for="fixedDaySplit" class="field-label">{{ 'transactions.form.dayOfMonth' | translate }}</label>
+                      <input id="fixedDaySplit" type="number" formControlName="fixedDay"
+                        placeholder="e.g. 25" min="1" max="31" step="1" />
+                      @if (form.controls.fixedDay.touched && form.controls.fixedDay.invalid) {
+                        <span class="field-error">{{ 'transactions.form.errors.fixedDayRange' | translate }}</span>
+                      }
+                    </div>
+                    <div class="grid-2">
+                      <div class="field">
+                        <label for="splitFirstAmount" class="field-label">{{ 'transactions.form.firstSplitAmount' | translate }}</label>
+                        <input id="splitFirstAmount" type="number" formControlName="splitFirstAmount"
+                          placeholder="0.00" step="0.01" min="0.01" />
+                      </div>
+                      <div class="field">
+                        <label for="splitFirstPercentage" class="field-label">{{ 'transactions.form.firstSplitPercentage' | translate }}</label>
+                        <input id="splitFirstPercentage" type="number" formControlName="splitFirstPercentage"
+                          placeholder="e.g. 40" step="0.01" min="0.01" max="100" />
+                      </div>
+                    </div>
+                    <p class="hint">{{ 'transactions.form.salaryHint' | translate }}</p>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
+      </form>
+    </div>
+
+    <footer class="drawer__footer">
+      <button type="button" class="btn btn--ghost" (click)="requestClose()" [disabled]="submitting()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="submit" form="tx-drawer-form" class="btn btn--primary" [disabled]="submitting()">
+        @if (mode() === 'edit') {
+          {{ (submitting() ? 'transactions.form.submitSaving' : 'transactions.form.submitSave') | translate }}
+        } @else {
+          {{ (submitting() ? 'transactions.form.submitCreating' : 'transactions.form.submitCreate') | translate }}
+        }
+      </button>
+    </footer>
+  </aside>
+}

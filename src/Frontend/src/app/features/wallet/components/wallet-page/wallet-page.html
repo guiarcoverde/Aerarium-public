@@ -1,0 +1,232 @@
+<div class="wallet-page">
+  <header class="wallet-header">
+    <div>
+      <h2>{{ 'wallet.title' | translate }}</h2>
+      <p>{{ 'wallet.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  @if (error()) {
+    <div class="error-banner">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <div class="loading">{{ 'common.loading' | translate }}</div>
+  } @else {
+    <!-- Bank Accounts Section -->
+    <section class="wallet-section">
+      <div class="section-header">
+        <h3>{{ 'wallet.bankAccounts' | translate }}</h3>
+        <button type="button" class="btn-new" (click)="openCreateBank()">
+          {{ 'wallet.addBank' | translate }}
+        </button>
+      </div>
+
+      @if (bankAccounts().length === 0) {
+        <div class="empty-state">
+          <p class="empty-title">{{ 'wallet.emptyBanks' | translate }}</p>
+          <p class="empty-hint">{{ 'wallet.emptyBanksHint' | translate }}</p>
+        </div>
+      } @else {
+        <div class="card-grid">
+          @for (bank of bankAccounts(); track bank.id) {
+            <div class="wallet-card">
+              <div class="wallet-card-header">
+                <div class="wallet-card-icon bank-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23" />
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                  </svg>
+                </div>
+                <div class="wallet-card-actions">
+                  <button type="button" class="action-btn" (click)="openEditBank(bank)" [title]="'common.edit' | translate">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="action-btn action-btn--danger" (click)="deleteBank(bank)" [title]="'common.delete' | translate">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="wallet-card-body">
+                <span class="wallet-card-name">{{ bank.name }}</span>
+                <span class="wallet-card-label">{{ 'wallet.balance' | translate }}</span>
+                <span class="wallet-card-value" [class.text-positive]="bank.balance >= 0" [class.text-negative]="bank.balance < 0">
+                  {{ bank.balance | currency: 'BRL' : 'symbol' : '1.2-2' }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Cards Section -->
+    <section class="wallet-section">
+      <div class="section-header">
+        <h3>{{ 'wallet.cards' | translate }}</h3>
+        <button type="button" class="btn-new" (click)="openCreateCard()">
+          {{ 'wallet.addCard' | translate }}
+        </button>
+      </div>
+
+      @if (cards().length === 0) {
+        <div class="empty-state">
+          <p class="empty-title">{{ 'wallet.emptyCards' | translate }}</p>
+          <p class="empty-hint">{{ 'wallet.emptyCardsHint' | translate }}</p>
+        </div>
+      } @else {
+        <div class="card-grid">
+          @for (card of cards(); track card.id) {
+            <div class="wallet-card">
+              <div class="wallet-card-header">
+                <div class="wallet-card-icon card-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <path d="M2 10h20" />
+                    <path d="M6 15h2" />
+                  </svg>
+                </div>
+                <span class="card-type-badge">{{ cardTypeLabel(card.type) | translate }}</span>
+                <div class="wallet-card-actions">
+                  <button type="button" class="action-btn" (click)="openEditCard(card)" [title]="'common.edit' | translate">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+                  <button type="button" class="action-btn action-btn--danger" (click)="deleteCard(card)" [title]="'common.delete' | translate">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="wallet-card-body">
+                <span class="wallet-card-name">{{ card.name }}</span>
+                @if (isCredit(card.type)) {
+                  <span class="wallet-card-label">{{ 'wallet.availableLimit' | translate }}</span>
+                  <span class="wallet-card-value text-positive">
+                    {{ card.availableLimit | currency: 'BRL' : 'symbol' : '1.2-2' }}
+                  </span>
+                  <div class="limit-bar">
+                    @let usedPct = card.creditLimit > 0 ? ((card.creditLimit - card.availableLimit) / card.creditLimit) * 100 : 0;
+                    <div class="limit-bar-fill" [style.width.%]="usedPct"></div>
+                  </div>
+                  <span class="wallet-card-sublabel">
+                    {{ 'wallet.totalLimit' | translate }}: {{ card.creditLimit | currency: 'BRL' : 'symbol' : '1.2-2' }}
+                  </span>
+                }
+                @if (isDebit(card.type) && card.linkedBankAccountName) {
+                  <span class="wallet-card-sublabel">
+                    {{ 'wallet.linkedTo' | translate }}: {{ card.linkedBankAccountName }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Bank Account Form Modal -->
+  @if (showBankForm()) {
+    <div class="modal-backdrop" (click)="closeBankForm()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>{{ (editingBank() ? 'wallet.editBank' : 'wallet.addBank') | translate }}</h3>
+
+        <div class="form-group">
+          <label>{{ 'wallet.bankName' | translate }}</label>
+          <input type="text" [value]="bankFormName()" (input)="bankFormName.set($any($event.target).value)"
+            [placeholder]="'wallet.bankNamePlaceholder' | translate" />
+        </div>
+
+        @if (!editingBank()) {
+          <div class="form-group">
+            <label>{{ 'wallet.initialBalance' | translate }}</label>
+            <input type="number" [value]="bankFormBalance()" (input)="bankFormBalance.set(+$any($event.target).value)"
+              step="0.01" />
+          </div>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeBankForm()">{{ 'common.cancel' | translate }}</button>
+          <button type="button" class="btn-save" [disabled]="bankFormSaving() || !bankFormName().trim()" (click)="saveBank()">
+            {{ (bankFormSaving() ? 'common.saving' : 'common.save') | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Card Form Modal -->
+  @if (showCardForm()) {
+    <div class="modal-backdrop" (click)="closeCardForm()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h3>{{ (editingCard() ? 'wallet.editCard' : 'wallet.addCard') | translate }}</h3>
+
+        <div class="form-group">
+          <label>{{ 'wallet.cardName' | translate }}</label>
+          <input type="text" [value]="cardFormName()" (input)="cardFormName.set($any($event.target).value)"
+            [placeholder]="'wallet.cardNamePlaceholder' | translate" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'wallet.cardTypeLabel' | translate }}</label>
+          <div class="type-toggles">
+            <label class="toggle-label">
+              <input type="checkbox" [checked]="isDebit(cardFormType())"
+                (change)="onTypeToggle(CardType.Debit, $any($event.target).checked)" />
+              {{ 'wallet.cardType.debit' | translate }}
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" [checked]="isCredit(cardFormType())"
+                (change)="onTypeToggle(CardType.Credit, $any($event.target).checked)" />
+              {{ 'wallet.cardType.credit' | translate }}
+            </label>
+          </div>
+        </div>
+
+        @if (isCredit(cardFormType())) {
+          <div class="form-group">
+            <label>{{ 'wallet.creditLimit' | translate }}</label>
+            <input type="number" [value]="cardFormCreditLimit()" (input)="cardFormCreditLimit.set(+$any($event.target).value)"
+              step="0.01" min="0" />
+          </div>
+        }
+
+        @if (isDebit(cardFormType())) {
+          <div class="form-group">
+            <label>{{ 'wallet.linkedBank' | translate }}</label>
+            <select [value]="cardFormLinkedBankId() ?? ''" (change)="cardFormLinkedBankId.set($any($event.target).value || null)">
+              <option value="">{{ 'wallet.selectBank' | translate }}</option>
+              @for (bank of bankAccounts(); track bank.id) {
+                <option [value]="bank.id">{{ bank.name }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeCardForm()">{{ 'common.cancel' | translate }}</button>
+          <button type="button" class="btn-save" [disabled]="cardFormSaving() || !cardFormName().trim()" (click)="saveCard()">
+            {{ (cardFormSaving() ? 'common.saving' : 'common.save') | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

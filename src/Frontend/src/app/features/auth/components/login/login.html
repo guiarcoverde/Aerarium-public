@@ -1,0 +1,46 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>{{ 'auth.login.heading' | translate }}</h1>
+    <p class="subtitle">{{ 'auth.login.subtitle' | translate }}</p>
+
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">{{ 'auth.login.email' | translate }}</label>
+        <input
+          id="email"
+          type="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+          [placeholder]="'auth.login.emailPlaceholder' | translate"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">{{ 'auth.login.password' | translate }}</label>
+        <input
+          id="password"
+          type="password"
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+          name="password"
+          [placeholder]="'auth.login.passwordPlaceholder' | translate"
+          required
+        />
+      </div>
+
+      <button type="submit" [disabled]="loading()">
+        {{ (loading() ? 'auth.login.submitting' : 'auth.login.submit') | translate }}
+      </button>
+    </form>
+
+    <p class="footer-link">
+      {{ 'auth.login.footer' | translate }} <a routerLink="/register">{{ 'auth.login.footerLink' | translate }}</a>
+    </p>
+  </div>
+</div>

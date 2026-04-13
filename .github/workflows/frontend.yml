@@ -1,0 +1,53 @@
+name: Frontend
+
+on:
+  push:
+    branches: [master, dev]
+    paths:
+      - 'src/Frontend/**'
+      - '.github/workflows/frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: src/Frontend/package-lock.json
+
+      - name: Install
+        working-directory: src/Frontend
+        run: npm ci
+
+      - name: Build (production)
+        if: github.ref == 'refs/heads/master'
+        working-directory: src/Frontend
+        run: npx ng build --configuration production
+
+      - name: Build (staging)
+        if: github.ref == 'refs/heads/dev'
+        working-directory: src/Frontend
+        run: npx ng build --configuration staging
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to prod
+        if: github.ref == 'refs/heads/master'
+        run: |
+          aws s3 sync src/Frontend/dist/Frontend/browser s3://${{ secrets.FRONTEND_BUCKET }} --delete
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
+
+      - name: Deploy to dev
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          aws s3 sync src/Frontend/dist/Frontend/browser s3://${{ secrets.FRONTEND_BUCKET_DEV }} --delete
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID_DEV }} --paths "/*"

@@ -1,0 +1,371 @@
+.wallet-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+// --- Header ------------------------------------------------------------------
+
+.wallet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+  }
+}
+
+// --- Section -----------------------------------------------------------------
+
+.wallet-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+  }
+}
+
+.btn-new {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--accent-primary);
+  color: var(--accent-ink);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+    background: var(--accent-primary-hover);
+  }
+}
+
+// --- Card Grid ---------------------------------------------------------------
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.wallet-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: var(--accent-primary);
+
+    .wallet-card-actions {
+      opacity: 1;
+    }
+  }
+}
+
+.wallet-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.wallet-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  &.bank-icon {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+  }
+
+  &.card-icon {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+  }
+}
+
+.card-type-badge {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.wallet-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.wallet-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wallet-card-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+.wallet-card-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+}
+
+.wallet-card-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+
+  &.text-positive {
+    color: var(--success);
+  }
+
+  &.text-negative {
+    color: var(--danger);
+  }
+}
+
+.wallet-card-sublabel {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+// --- Limit bar ---------------------------------------------------------------
+
+.limit-bar {
+  height: 4px;
+  background: var(--bg-elevated);
+  border-radius: 2px;
+  margin-top: var(--space-2);
+  overflow: hidden;
+}
+
+.limit-bar-fill {
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+// --- Action buttons ----------------------------------------------------------
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+
+  &--danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    border-color: rgba(239, 68, 68, 0.4);
+  }
+}
+
+// --- Empty / Error / Loading -------------------------------------------------
+
+.error-banner {
+  padding: var(--space-3) var(--space-4);
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--danger);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.loading {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 3rem 2rem;
+  background: var(--bg-primary);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+
+  .empty-title {
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .empty-hint {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    max-width: 32rem;
+  }
+}
+
+// --- Modal -------------------------------------------------------------------
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  width: min(420px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  label {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+  }
+
+  input,
+  select {
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-family: inherit;
+    outline: none;
+
+    &:focus {
+      border-color: var(--accent-primary);
+    }
+  }
+}
+
+.type-toggles {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm) !important;
+  color: var(--text-primary) !important;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-primary);
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.btn-cancel {
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+
+  &:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+  }
+}
+
+.btn-save {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--accent-primary);
+  color: var(--accent-ink);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--accent-primary-hover);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
